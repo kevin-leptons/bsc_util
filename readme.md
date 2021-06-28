@@ -5,13 +5,13 @@
 # Install
 
 ```bash
-npm install bsc-util
+npm install bsc_util
 ```
 
 # APIs
 
 ```js
-const bscUtil = require('bsc-util')
+const bscUtil = require('bsc_util')
 
 // factory can be
 //  * `pancake` PancakeSwap V1
