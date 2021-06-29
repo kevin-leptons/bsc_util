@@ -212,4 +212,13 @@ describe('findPair', () => {
 
         assert.strictEqual(actualAddress, expectAddress)
     })
+
+    it('BakerySwap factory', () => {
+        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+        let clownAddress = '0xfa949ef822125233f1e1a0691c13977b4354b257'
+        let expectAddress = '0x9d311dd545ae8b39e86ed3733edfe4d5b7f27e0a'
+        let actualAddress = findPair('bakery', wbnbAddress, clownAddress)
+
+        assert.strictEqual(actualAddress, expectAddress)
+    })
 })

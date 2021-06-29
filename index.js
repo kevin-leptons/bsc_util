@@ -8,7 +8,8 @@ const {AddressZero} = require('ethers').constants
 //  * ETH address can be prefix with or without `0x`.
 //
 // Input
-//  * factory {String} One of `pancake`, `pancake2`, `burger`, `jul`, `ape`.
+//  * factory {String} One of `pancake`, `pancake2`, `burger`, `jul`, `ape`,
+//    `bakery`.
 //  * addressA {String} ETH token address.
 //  * addressB {String} Other ETH token address.
 //
@@ -36,6 +37,8 @@ function findPair(factory, addressA, addressB) {
             return _buildJulSwap(lowerAddressA, lowerAddressB)
         case 'ape':
             return _buildApeSwap(lowerAddressA, lowerAddressB)
+        case 'bakery':
+            return _buildBakerySwap(lowerAddressA, lowerAddressB)
         default:
             throw Error('Invalid factory')
     }
@@ -197,11 +200,35 @@ function _buildApeSwap(addressA, addressB) {
     return '0x'+ keccak256(data).substring(26)
 }
 
+// Descriptions
+//  * Build BakerySwap token pair address from two token addresses.
+//  * Input addresses must be non checksum.
+//  * Factory source: https://github.com/BakeryProject/bakery-swap-core/blob/904f7dc210ed45f30b602068efc94b277d01fa0e/contracts/BakerySwapFactory.sol
+//
+// Input
+//  * addressA {String} ETH token address.
+//  * addressB {String} Other ETH token address.
+//
+// Output {String} Non checksum token pair address.
+function _buildBakerySwap(addressA, addressB) {
+    let tokens = [addressA, addressB].sort()
+    let factoryAddress = '01bf7c66c6bd861915cdaae475042d3c4bae16a7'
+    let factoryInitCode =
+        'e2e87433120e32c4738a7d8f3271f3d872cbe16241d67537139158d90bac61d3'
+    let salt = keccak256(
+        tokens[0] + tokens[1].substring(2)
+    ).substring(2)
+    let data = ['0xff', factoryAddress, salt, factoryInitCode].join('')
+
+    return '0x' + keccak256(data).substring(26)
+}
+
 module.exports = {
     findPair,
     _buildPancakeSwapV1,
     _buildPancakeSwapV2,
     _buildBurgerSwap,
     _buildJulSwap,
-    _buildApeSwap
+    _buildApeSwap,
+    _buildBakerySwap
 }
