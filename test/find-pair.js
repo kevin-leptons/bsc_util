@@ -4,16 +4,108 @@ const assert = require('assert')
 const {findPair} = require('../')
 
 describe('findPair', () => {
-    it('Addresses are the same throw error', () => {
-        let btcbAddress = '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c'
+    it('Not supported factory throw error', () => {
+        let invalidFactory = 'coca cola'
+        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+        let dotAddress = '0x7083609fce4d1d8dc0c979aab8c869ea2c873402'
 
         assert.throws(
             () => {
-                findPair('pancake', btcbAddress, btcbAddress)
+                findPair(invalidFactory, wbnbAddress, dotAddress)
             },
             {
                 name: 'Error',
-                message: 'Not identical address'
+                message: 'Invalid factory'
+            }
+        )
+    })
+
+    it('First address has non hex symbol throw error', () => {
+        let invalidAddress = '0x0e09fabb73bd3ade0a17ecc321fd13a19e81cXXX'
+        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+
+        assert.throws(
+            () => {
+                findPair('pancake', invalidAddress, wbnbAddress)
+            },
+            {
+                name: 'Error',
+                message: 'Invalid ETH address'
+            }
+        )
+    })
+
+    it('Second address has non hex symbol throw error', () => {
+        let cakeAddress = '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82'
+        let invalidAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc0XXX'
+
+        assert.throws(
+            () => {
+                findPair('pancake', cakeAddress, invalidAddress)
+            },
+            {
+                name: 'Error',
+                message: 'Invalid ETH address'
+            }
+        )
+    })
+
+    it('First address is too long throw error', () => {
+        let invalidAddress = '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9cAAA'
+        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+
+        assert.throws(
+            () => {
+                findPair('pancake', invalidAddress, wbnbAddress)
+            },
+            {
+                name: 'Error',
+                message: 'Invalid ETH address'
+            }
+        )
+    })
+
+    it('Second address is too long throw error', () => {
+        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+        let invalidAddress = '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9caaa'
+
+        assert.throws(
+            () => {
+                findPair('pancake', wbnbAddress, invalidAddress)
+            },
+            {
+                name: 'Error',
+                message: 'Invalid ETH address'
+            }
+        )
+    })
+
+    it('First address is too short throw error', () => {
+        let invalidAddress = '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ea'
+        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+
+        assert.throws(
+            () => {
+                findPair('pancake', invalidAddress, wbnbAddress)
+            },
+            {
+                name: 'Error',
+                message: 'Invalid ETH address'
+            }
+        )
+    })
+
+    it('Second address is too short throw error', () => {
+        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+        let invalidAddress = '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ea'
+
+        assert.throws(
+            () => {
+                findPair('pancake', wbnbAddress, invalidAddress)
+            },
+            {
+                name: 'Error',
+                message: 'Invalid ETH address'
             }
         )
     })
@@ -34,8 +126,8 @@ describe('findPair', () => {
     })
 
     it('Second address is zero throw error', () => {
-        let zeroAddress = '0x0000000000000000000000000000000000000000'
         let btcbAddress = '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c'
+        let zeroAddress = '0x0000000000000000000000000000000000000000'
 
         assert.throws(
             () => {
@@ -48,139 +140,60 @@ describe('findPair', () => {
         )
     })
 
-    it('First address is missing prefix "0x" throw error', () => {
-        let invalidAddress = '7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c'
+    it('Addresses are the same throw error', () => {
+        let btcbAddress = '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c'
+
+        assert.throws(
+            () => {
+                findPair('pancake', btcbAddress, btcbAddress)
+            },
+            {
+                name: 'Error',
+                message: 'Not identical address'
+            }
+        )
+    })
+
+    it('Address with prefix "0x"', () => {
         let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+        let dotAddress = '0x7083609fce4d1d8dc0c979aab8c869ea2c873402'
+        let expectAddress = '0xbCD62661A6b1DEd703585d3aF7d7649Ef4dcDB5c'
+        let actualAddress = findPair('pancake', wbnbAddress, dotAddress)
 
-        assert.throws(
-            () => {
-                findPair('pancake', invalidAddress, wbnbAddress)
-            },
-            {
-                name: 'Error',
-                message: 'Invalid token address'
-            }
-        )
+        assert.strictEqual(actualAddress, expectAddress)
     })
 
-    it('Second address is missing prefix "0x" throw error', () => {
-        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
-        let invalidAddress = '7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c'
+    it('Address without prefix "0x"', () => {
+        let wbnbAddress = 'bb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+        let dotAddress = '7083609fce4d1d8dc0c979aab8c869ea2c873402'
+        let expectAddress = '0xbCD62661A6b1DEd703585d3aF7d7649Ef4dcDB5c'
+        let actualAddress = findPair('pancake', wbnbAddress, dotAddress)
 
-        assert.throws(
-            () => {
-                findPair('pancake', wbnbAddress, invalidAddress)
-            },
-            {
-                name: 'Error',
-                message: 'Invalid token address'
-            }
-        )
+        assert.strictEqual(actualAddress, expectAddress)
     })
 
-    it('First address has invalid symbol throw error', () => {
-        let invalidAddress = '0xwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+    it('Checksum address', () => {
+        let wbnbAddress = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+        let dotAddress = '0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402'
+        let expectAddress = '0xbCD62661A6b1DEd703585d3aF7d7649Ef4dcDB5c'
+        let actualAddress = findPair('pancake', wbnbAddress, dotAddress)
 
-        assert.throws(
-            () => {
-                findPair('pancake', invalidAddress, wbnbAddress)
-            },
-            {
-                name: 'Error',
-                message: 'Invalid token address'
-            }
-        )
-    })
-
-    it('Second address has invalid symbol throw error', () => {
-        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
-        let invalidAddress = '0xwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-
-        assert.throws(
-            () => {
-                findPair('pancake', wbnbAddress, invalidAddress)
-            },
-            {
-                name: 'Error',
-                message: 'Invalid token address'
-            }
-        )
-    })
-
-    it('First address is too long throw error', () => {
-        let invalidAddress = '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9cAAA'
-        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
-
-        assert.throws(
-            () => {
-                findPair('pancake', invalidAddress, wbnbAddress)
-            },
-            {
-                name: 'Error',
-                message: 'Invalid token address'
-            }
-        )
-    })
-
-    it('Second address is too long throw error', () => {
-        let invalidAddress = '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c'
-        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095cAAA'
-
-        assert.throws(
-            () => {
-                findPair('pancake', invalidAddress, wbnbAddress)
-            },
-            {
-                name: 'Error',
-                message: 'Invalid token address'
-            }
-        )
-    })
-
-    it('First address is too short throw error', () => {
-        let invalidAddress = '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ea'
-        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
-
-        assert.throws(
-            () => {
-                findPair('pancake', invalidAddress, wbnbAddress)
-            },
-            {
-                name: 'Error',
-                message: 'Invalid token address'
-            }
-        )
-    })
-
-    it('Second address is too short throw error', () => {
-        let invalidAddress = '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c'
-        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc0'
-
-        assert.throws(
-            () => {
-                findPair('pancake', invalidAddress, wbnbAddress)
-            },
-            {
-                name: 'Error',
-                message: 'Invalid token address'
-            }
-        )
+        assert.strictEqual(actualAddress, expectAddress)
     })
 
     it('PancakeSwap V1 factory', () => {
         let cakeAddress = '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82'
         let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
-        let expectAddress = '0xa527a61703d82139f8a06bc30097cc9caa2df5a6'
+        let expectAddress = '0xA527a61703D82139F8a06Bc30097cC9CAA2df5A6'
         let actualAddress = findPair('pancake', cakeAddress, wbnbAddress)
 
         assert.strictEqual(actualAddress, expectAddress)
     })
 
-    it ('PancakeSwap V2 factory', () => {
+    it('PancakeSwap V2 factory', () => {
         let cakeAddress = '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82'
         let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
-        let expectAddress = '0x0ed7e52944161450477ee417de9cd3a859b14fd0'
+        let expectAddress = '0x0eD7e52944161450477ee417DE9Cd3a859b14fD0'
         let actualAddress = findPair('pancake2', cakeAddress, wbnbAddress)
 
         assert.strictEqual(actualAddress, expectAddress)
@@ -189,7 +202,7 @@ describe('findPair', () => {
     it('Burger factory', () => {
         let imoAddress = '0x6bdd25b0b786ff3e992baa1a2cb6cc41f61d6737'
         let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
-        let expectAddress = '0x24e6212664ff264eaebb53926811680d1d9e6ac5'
+        let expectAddress = '0x24E6212664ff264EaeBb53926811680d1d9e6AC5'
         let actualAddress = findPair('burger', imoAddress, wbnbAddress)
 
         assert.strictEqual(actualAddress, expectAddress)
@@ -198,17 +211,17 @@ describe('findPair', () => {
     it('JulSwap factory', () => {
         let cakeAddress = '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82'
         let ePycAddress = '0x322895d51479e5de68cc3492bf0dea07c549a0e2'
-        let expectAddress = '0xf17ad5dad9293523d6d99a14add6cec43f943603'
+        let expectAddress = '0xf17AD5dAd9293523d6D99a14Add6Cec43f943603'
         let actualAddress = findPair('jul', cakeAddress, ePycAddress)
 
         assert.strictEqual(actualAddress, expectAddress)
     })
 
     it('ApeSwap factory', () => {
-        let artAddress = '0x36fb4fa5d09fba8beaced0f15397a2b023d9d4b1'
-        let hstAddress = '0xabd6f436bae8539f5b5979b28ed2e3097401f593'
-        let expectAddress = '0xa7468f37ccfd6047807ec002b1c85de484357a49'
-        let actualAddress = findPair('ape', artAddress, hstAddress)
+        let lnxAddress = '0xc465503b2f65cc67a070f9afe3f095f2d1e49331'
+        let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+        let expectAddress = '0x878f20766BaE2748eFA77824b8c4f51513aEe3eB'
+        let actualAddress = findPair('ape', lnxAddress, wbnbAddress)
 
         assert.strictEqual(actualAddress, expectAddress)
     })
@@ -216,7 +229,7 @@ describe('findPair', () => {
     it('BakerySwap factory', () => {
         let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
         let clownAddress = '0xfa949ef822125233f1e1a0691c13977b4354b257'
-        let expectAddress = '0x9d311dd545ae8b39e86ed3733edfe4d5b7f27e0a'
+        let expectAddress = '0x9d311dd545Ae8b39e86ed3733eDfe4D5B7f27e0a'
         let actualAddress = findPair('bakery', wbnbAddress, clownAddress)
 
         assert.strictEqual(actualAddress, expectAddress)
