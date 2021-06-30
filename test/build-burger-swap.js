@@ -18,10 +18,10 @@ describe('_buildBurgerSwap', () => {
     })
 
     it('asd-BURGER', () => {
-        let imoAddress = hex('22e8dadac6f526a804a5f8548b6dd217772c2488')
-        let wbnbAddress = hex('ae9269f27437f0fcbc232d39ec814844a51d6b8f')
+        let asdAddress = hex('22e8dadac6f526a804a5f8548b6dd217772c2488')
+        let burgerAddress = hex('ae9269f27437f0fcbc232d39ec814844a51d6b8f')
         let expectAddress = hex('f9d45bba7b401ab11dd6863c916f28e78a1fc225')
-        let actualAddress = _buildBurgerSwap(imoAddress, wbnbAddress)
+        let actualAddress = _buildBurgerSwap(asdAddress, burgerAddress)
 
         assert.strictEqual(
             actualAddress.equals(expectAddress),
@@ -30,11 +30,11 @@ describe('_buildBurgerSwap', () => {
     })
 
     it('Different address position return the same result', () => {
-        let imoAddress = hex('22e8dadac6f526a804a5f8548b6dd217772c2488')
-        let wbnbAddress = hex('ae9269f27437f0fcbc232d39ec814844a51d6b8f')
+        let asdAddress = hex('22e8dadac6f526a804a5f8548b6dd217772c2488')
+        let burgerAddress = hex('ae9269f27437f0fcbc232d39ec814844a51d6b8f')
         let expectAddress = hex('f9d45bba7b401ab11dd6863c916f28e78a1fc225')
-        let actualAddress1 = _buildBurgerSwap(imoAddress, wbnbAddress)
-        let actualAddress2 = _buildBurgerSwap(wbnbAddress, imoAddress)
+        let actualAddress1 = _buildBurgerSwap(asdAddress, burgerAddress)
+        let actualAddress2 = _buildBurgerSwap(burgerAddress, asdAddress)
 
         assert.strictEqual(
             actualAddress1.equals(actualAddress2),
