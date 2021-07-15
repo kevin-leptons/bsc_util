@@ -17,6 +17,16 @@ const {findPair} = require('bsc_util')
 # APIs
 
 ```js
+// Type BigNumber {BigNumber from bignumber.js}
+
+// Type NumberLike {Number | String | BigNumber} Represent for a number. If it
+// is string then it contains decimal digits.
+
+// Type ExchangeName {String} One of following values: `pancake`, `pancake2`,
+// `bakery`, `jul`, `ape`.
+```
+
+```js
 // Descriptions
 //  * Build token pair address from two token addresses.
 //
@@ -34,6 +44,25 @@ const {findPair} = require('bsc_util')
 //  * Error `Not accepted zero address`
 //  * Error `Not identical address`
 function findPair(factory, addressA, addressB) {}
+```
+
+```js
+// Descriptions
+//  * Calculate amount of received token on swap.
+//  * The fomular: a1 = r1.a0/(r0 + a0), where `a1` is amount of output token.
+//
+// Input
+//  * exchange {ExchangeName}
+//  * a0 {NumberLike} Amount of input token.
+//  * r0 {NumberLike} Reserve of input token.
+//  * r1 {NumberLike} Reserve of output token.
+//
+// Output {BigNumber} Amount of output token.
+//
+// Errors
+//  * Error `Invalid reserves`
+//  * Error `Invalid input amount`
+function getExchangeAmount(exchange, a0, r0, r1) {}
 ```
 
 # Development

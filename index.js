@@ -1,5 +1,15 @@
 'use strict'
 
+const BigNumber = require('bignumber.js')
+
+// Type BigNumber {BigNumber from bignumber.js}
+
+// Type NumberLike {Number | String | BigNumber} Represent for a number. If it
+// is string then it contains decimal digits.
+
+// Type ExchangeName {String} One of following values: `pancake`, `pancake2`,
+// `bakery`, `jul`, `ape`.
+
 const {
     keccak256,
     isAddress,
@@ -345,8 +355,85 @@ function _buildBakerySwap(addressA, addressB) {
     return hash.slice(12)
 }
 
+// Descriptions
+//  * Calculate amount of received token on swap.
+//  * The fomular: a1 = r1.a0/(r0 + a0), where `a1` is amount of output token.
+//
+// Input
+//  * exchange {ExchangeName}
+//  * a0 {NumberLike} Amount of input token.
+//  * r0 {NumberLike} Reserve of input token.
+//  * r1 {NumberLike} Reserve of output token.
+//
+// Output {BigNumber} Amount of output token.
+//
+// Errors
+//  * Error `Invalid reserves`
+//  * Error `Invalid input amount`
+function getExchangeAmount(exchange, a0, r0, r1) {
+    let outputAmount = _getExchangeAmount(
+        exchange,
+        new BigNumber(a0),
+        new BigNumber(r0),
+        new BigNumber(r1)
+    )
+
+    return outputAmount.toString()
+}
+
+// Descriptions
+//  * It is similar like `getExchangeAmount` but with big number as input.
+function _getExchangeAmount(exchange, a0, r0, r1) {
+    if (a0.lt(0)) {
+        throw Error('Invalid input amount')
+    }
+
+    if (r0.lte(0) || r1.lte(0)) {
+        throw Error('Invalid reserves')
+    }
+
+    let fee = _exchangeFee(exchange, a0)
+    let inputAmount = a0.minus(fee)
+    let x = r1.times(inputAmount)
+    let y = r0.plus(inputAmount)
+
+    return x.div(y)
+}
+
+// Descriptions
+//  * Calculate exchange fee.
+//
+// Input
+//  * exchange {ExchangeName}
+//  * inputAmount {BigNumber}
+//
+// Output {BigNumber}
+function _exchangeFee(exchange, inputAmount) {
+    let feeAsPercentage = _exchangeFeeAsPercentage(exchange)
+
+    return inputAmount
+        .times(feeAsPercentage)
+        .div(100)
+}
+
+// Input
+//  * exchange {ExchangeName}
+//
+// Output {BigNumber}
+function _exchangeFeeAsPercentage(exchange) {
+    switch (exchange) {
+        case 'pancake': return 0.20
+        case 'pancake2': return 0.25
+        case 'bakery': return 0.3
+        case 'ape': return 0.2
+        case 'jul': return 0.3
+        default: throw Error('Invalid exchange')
+    }
+}
+
 module.exports = {
     findPair,
+    getExchangeAmount,
     _buildPancakeSwapV1,
     _buildPancakeSwapV2,
     _buildBurgerSwap,
