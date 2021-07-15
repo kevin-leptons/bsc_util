@@ -1,6 +1,6 @@
 {
   "name": "bsc_util",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Utilities for tokens and token pairs on Binance Smart Chain network",
   "main": "index.js",
   "scripts": {
