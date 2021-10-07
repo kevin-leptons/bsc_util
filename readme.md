@@ -11,7 +11,7 @@ npm install bsc_util
 # Use
 
 ```js
-const {findPair} = require('bsc_util')
+const {findPair, findPairBuffer, getExchangeAmount} = require('bsc_util')
 ```
 
 # APIs
@@ -44,6 +44,24 @@ const {findPair} = require('bsc_util')
 //  * Error `Not accepted zero address`
 //  * Error `Not identical address`
 function findPair(factory, addressA, addressB) {}
+
+// Descriptions
+//  * Build token pair address from two token addresses.
+//
+// Input
+//  * factory {String} One of `pancake`, `pancake2`, `burger`, `jul`, `ape`,
+//    `bakery`.
+//  * addressA {Buffer[20]} ETH token address as buffer.
+//  * addressB {Buffer[20]} An other token address.
+//
+// Output {Buffer[20]} ETH token pair address.
+//
+// Errors
+//  * Error `Invalid factory`
+//  * Error `Invalid ETH buffer address`
+//  * Error `Not accepted zero address`
+//  * Error `Not identical address`
+function findPairBuffer(factory, addressA, addressB) {}
 ```
 
 ```js

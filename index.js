@@ -94,6 +94,26 @@ function findPair(factory, addressA, addressB) {
 }
 
 // Descriptions
+//  * Build token pair address from two token addresses.
+//
+// Input
+//  * factory {String} One of `pancake`, `pancake2`, `burger`, `jul`, `ape`,
+//    `bakery`.
+//  * addressA {Buffer[20]} ETH token address as buffer.
+//  * addressB {Buffer[20]} An other token address.
+//
+// Output {Buffer[20]} ETH token pair address.
+//
+// Errors
+//  * Error `Invalid factory`
+//  * Error `Invalid ETH buffer address`
+//  * Error `Not accepted zero address`
+//  * Error `Not identical address`
+function findPairBuffer(factory, addressA, addressB) {
+    return _buildTokenPairAddress(factory, addressA, addressB)
+}
+
+// Descriptions
 //  * Validate addresses.
 //  * Convert string addresses to buffers.
 //
@@ -109,8 +129,6 @@ function findPair(factory, addressA, addressB) {
 //
 // Errors
 //  * Error `Invalid ETH address`
-//  * Error `Not accepted zero address`
-//  * Error `Not identical address`
 function _toAddressPairBuffer(addressA, addressB) {
     if (!isAddress(addressA) || !isAddress(addressB)) {
         throw Error('Invalid ETH address')
@@ -118,14 +136,6 @@ function _toAddressPairBuffer(addressA, addressB) {
 
     let bufferA = _bufferFromAddress(addressA)
     let bufferB = _bufferFromAddress(addressB)
-
-    if (bufferA.equals(ADDRESS_ZERO) || bufferB.equals(ADDRESS_ZERO)) {
-        throw Error('Not accepted zero address')
-    }
-
-    if (bufferA.equals(bufferB)) {
-        throw Error('Not identical address')
-    }
 
     return [bufferA, bufferB]
 }
@@ -156,7 +166,25 @@ function _bufferFromAddress(address) {
 //
 // Errors
 //  * Error `Invalid factory`
+//  * Error `Invalid ETH buffer address`
+//  * Error `Not accepted zero address`
+//  * Error `Not identical address`
 function _buildTokenPairAddress(factory, addressA, addressB) {
+    if (!_isBufferAddress(addressA) || !_isBufferAddress(addressB)) {
+        throw new Error('Invalid ETH buffer address')
+    }
+
+    if (
+        Buffer.compare(addressA, ADDRESS_ZERO) === 0 ||
+        Buffer.compare(addressB, ADDRESS_ZERO) === 0
+    ) {
+        throw new Error('Not accepted zero address')
+    }
+
+    if (Buffer.compare(addressA, addressB) === 0) {
+        throw new Error('Not identical address')
+    }
+
     switch (factory) {
         case 'pancake':
             return _buildPancakeSwapV1(addressA, addressB)
@@ -431,8 +459,19 @@ function _exchangeFeeAsPercentage(exchange) {
     }
 }
 
+// Input
+//  * address {any}
+//
+// Output {Boolean}
+//  * {true} Address is buffer 20 bytes.
+//  * {false} Otherwise.
+function _isBufferAddress(address) {
+    return (address instanceof Buffer) && address.length === 20
+}
+
 module.exports = {
     findPair,
+    findPairBuffer,
     getExchangeAmount,
     _buildPancakeSwapV1,
     _buildPancakeSwapV2,
