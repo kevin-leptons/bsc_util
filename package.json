@@ -1,11 +1,11 @@
 {
   "name": "bsc_util",
-  "version": "0.5.0",
+  "version": "2.0.0",
   "description": "Utilities for tokens and token pairs on Binance Smart Chain network",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "mocha",
-    "standard": "trop_standard index.js test/"
+    "test": "mocha --recursive --exit",
+    "standardize": "trop_standard lib/ test/"
   },
   "author": "Kevin Leptons",
   "license": "MIT",
