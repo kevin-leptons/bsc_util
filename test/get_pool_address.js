@@ -211,6 +211,15 @@ describe('getPoolAddress', () => {
         assert.deepStrictEqual(actualAddress, expectAddress)
     })
 
+    it('Bi exchange', () => {
+        let formAddress = heximalToBuffer('0x25a528af62e56512a19ce8c3cab427807c28cc19')
+        let busdAddress = heximalToBuffer('0xe9e7cea3dedca5984780bafc599bd69add087d56')
+        let expectAddress = heximalToBuffer('0x43c1e1a0998d9e025d899e71d5199b6f6911add3')
+        let actualAddress = getPoolAddress('bi', formAddress, busdAddress)
+
+        assert.deepStrictEqual(actualAddress, expectAddress)
+    })
+
     it('Mdex exchange', () => {
         let betAddress = heximalToBuffer('0x028a52032a7075a42585c037f069c62b49ebaa3d')
         let busdAddress = heximalToBuffer('0x55d398326f99059ff775485246999027b3197955')
@@ -225,6 +234,15 @@ describe('getPoolAddress', () => {
         let usdcAddress = heximalToBuffer('0x55d398326f99059ff775485246999027b3197955')
         let expectAddress = heximalToBuffer('0x85d2e6d17162275740e1e630933306ce50967073')
         let actualAddress = getPoolAddress('cafe', usdtAddress, usdcAddress)
+
+        assert.deepStrictEqual(actualAddress, expectAddress)
+    })
+
+    it('Jet exchange', () => {
+        let busdAddress = heximalToBuffer('0x55d398326f99059ff775485246999027b3197955')
+        let ad2Address = heximalToBuffer('0xc4acd115f1ceebd4a88273423d6cf77c4a1c7559')
+        let expectAddress = heximalToBuffer('0xedd292325acd24d045077ffcad2b1020db9bcec1')
+        let actualAddress = getPoolAddress('jet', busdAddress, ad2Address)
 
         assert.deepStrictEqual(actualAddress, expectAddress)
     })
