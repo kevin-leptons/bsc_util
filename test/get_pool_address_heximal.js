@@ -236,4 +236,13 @@ describe('getPoolAddressHeximal', () => {
 
         assert.strictEqual(actualAddress, expectAddress)
     })
+
+    it('Mdex exchange', () => {
+        let betAddress = '0x028a52032a7075a42585c037f069c62b49ebaa3d'
+        let busdAddress = '0x55d398326f99059ff775485246999027b3197955'
+        let expectAddress = '0x40050bc7C87a2e1669F8D55f607a145bD54fa4f4'
+        let actualAddress = getPoolAddressHeximal('mdex', betAddress, busdAddress)
+
+        assert.deepStrictEqual(actualAddress, expectAddress)
+    })
 })
