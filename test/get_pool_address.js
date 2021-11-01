@@ -219,4 +219,13 @@ describe('getPoolAddress', () => {
 
         assert.deepStrictEqual(actualAddress, expectAddress)
     })
+
+    it('Cafe exchange', () => {
+        let usdtAddress = heximalToBuffer('0x23396cf899ca06c4472205fc903bdb4de249d6fc')
+        let usdcAddress = heximalToBuffer('0x55d398326f99059ff775485246999027b3197955')
+        let expectAddress = heximalToBuffer('0x85d2e6d17162275740e1e630933306ce50967073')
+        let actualAddress = getPoolAddress('cafe', usdtAddress, usdcAddress)
+
+        assert.deepStrictEqual(actualAddress, expectAddress)
+    })
 })
