@@ -91,4 +91,12 @@ function getExchangeAmount(exchange, a0, r0, r1) {}
 //  * "mdex"
 //  * "cafe"
 //  * "jet"
+
+// Type BigNumber {BigNumber from bignumber.js}
+
+// Type Decimal {String}
+//
+// A number as string, based 10.
+
+// Type NumberLike {Number | Decimal | BigNumber} Represent for a number.
 ```
