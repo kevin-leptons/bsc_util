@@ -7,7 +7,7 @@ const {_getPoolAddressCafe} = require('../')
 const {heximalToBuffer} = require('./_lib')
 
 describe('_getPoolAddressCafe', () => {
-    it('CORONAS/WBNB', () => {
+    it('BUSD/USDC', () => {
         let busdAddress = heximalToBuffer('0x55d398326f99059ff775485246999027b3197955')
         let usdcAddress = heximalToBuffer('0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d')
         let expectAddress = heximalToBuffer('0x95df5fef2154f43596f70c4b92b444e5f540afb6')
@@ -16,7 +16,7 @@ describe('_getPoolAddressCafe', () => {
         assert.deepStrictEqual(actualAddress, expectAddress)
     })
 
-    it('BET/BUSD', () => {
+    it('WBNB/MERCURY', () => {
         let wbnbAddress = heximalToBuffer('0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c')
         let mercury = heximalToBuffer('0xd8158c380d8d05e47bebe06ffe1f73ba5268dc32')
         let expectAddress = heximalToBuffer('0x2fa5ab464feea37feaf0b4232bd2b9325d9ba2d9')
