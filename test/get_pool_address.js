@@ -8,7 +8,7 @@ const {heximalToBuffer} = require('./_lib')
 
 describe('getPoolAddress', () => {
     it('Not supported exchange throws error', () => {
-        let invalidFactory = 'coca cola'
+        let invalidFactory = 'foo and bar'
         let wbnbAddress = heximalToBuffer('0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c')
         let dotAddress = heximalToBuffer('0x7083609fce4d1d8dc0c979aab8c869ea2c873402')
 
@@ -243,6 +243,15 @@ describe('getPoolAddress', () => {
         let ad2Address = heximalToBuffer('0xc4acd115f1ceebd4a88273423d6cf77c4a1c7559')
         let expectAddress = heximalToBuffer('0xedd292325acd24d045077ffcad2b1020db9bcec1')
         let actualAddress = getPoolAddress('jet', busdAddress, ad2Address)
+
+        assert.deepStrictEqual(actualAddress, expectAddress)
+    })
+
+    it('Baby exchange', () => {
+        let cakeAddress = heximalToBuffer('0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82')
+        let wbnbAddress = heximalToBuffer('0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c')
+        let expectAddress = heximalToBuffer('0x8eea120384ace96a63e2f144ef7f9a6f2bbcff8f')
+        let actualAddress = getPoolAddress('baby', cakeAddress, wbnbAddress)
 
         assert.deepStrictEqual(actualAddress, expectAddress)
     })

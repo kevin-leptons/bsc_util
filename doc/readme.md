@@ -2,7 +2,7 @@
 
 * [Installation](#installation)
 * [Examples](#examples)
-* [API References](./api.md)
+* [API References](https://kevin-leptons.github.io/bsc_util)
 * [Development](#development)
 * [References](#references)
 
@@ -15,29 +15,25 @@ npm install bsc_util
 # Examples
 
 ```js
-const {getPoolAddress} = require('bsc_util')
+const {getPoolAddress, toEthAddress, ExchangeName} = require('bsc_util')
 
-let exchange = 'pancake2'
-let cakeAddress = Buffer.from(
-    '0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
-    'hex'
-)
-let wbnbAddress = Buffer.from(
-    'bb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-    'hex'
-)
+let cakeAddress = toEthAddress('0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82')
+let wbnbAddress = toEthAddress('0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c')
 let poolAddress = getPoolAddress(
-    exchange,
+    ExchangeName.PANCAKE2,
     cakeAddress,
-    poolAddress
+    wbnbAddress
 )
 ```
 
-## Development
+# Development
 
 ```bash
-npm test                # Perform unit tests
+npm test                # Run unit tests
 npm run standardize     # Check coding standard
+npm run doc             # Build documents and put to directory `./docs`.
+npm run doc-server      # Start local server to test documents.
+npm run doc-clean       # Empty documents directory `./docs`.
 ```
 
 # References
@@ -51,3 +47,4 @@ npm run standardize     # Check coding standard
 * [MdexSwap Factory](https://github.com/mdexSwap/bscswap)
 * [CafeSwap Factory](https://github.com/CafeSwap/cafe-swap-core/blob/master/contracts/CafeFactory.sol)
 * [JetSwap Factory](https://docs.jetswap.finance/contracts)
+* [BabySwap Factory](https://docs.babyswap.finance/developers/smart-contracts)

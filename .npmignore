@@ -1,7 +1,8 @@
-node_modules/
-doc/
-test/
-tmp/
+/node_modules/
+/doc/
+/docs/
+/test/
+/tmp/
 package-lock.json
 *.tgz
 *.swp
