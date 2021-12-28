@@ -17,7 +17,7 @@ describe('getPoolAddressHeximal', () => {
             },
             {
                 name: 'Error',
-                message: 'Invalid exchange'
+                message: 'invalid exchange name'
             }
         )
     })
