@@ -272,4 +272,13 @@ describe('getPoolAddressHeximal', () => {
 
         assert.deepStrictEqual(actualAddress, expectAddress)
     })
+
+    it('Openocean exchange', () => {
+        let metapayAddress = '0x4c460c84b34a89fb76778a0995b2128e6038c995'
+        let busdAddress = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
+        let expectAddress = '0x564E68785fA27E836160FFCe201051dCE17c5e18'
+        let actualAddress = getPoolAddressHeximal('openocean', metapayAddress, busdAddress)
+
+        assert.deepStrictEqual(actualAddress, expectAddress)
+    })
 })
